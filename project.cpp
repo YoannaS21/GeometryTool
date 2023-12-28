@@ -91,6 +91,27 @@ void perpendicularLine()
     }
 }
 
+void intersectionOfTwoLines()
+{
+    double slope1 = inputLineSlope();
+    double intercept1 = inputLineIntercept();
+    double slope2 = inputLineSlope();
+    double intercept2 = inputLineIntercept();
+
+    if (abs(slope1 - slope2) < __DBL_EPSILON__)
+    {
+        cout << "The two lines don't intersect.";
+        return;
+    }
+    else
+    {
+        double x = (intercept2 - intercept1) / (slope1 - slope2);
+        double y = slope1 * x + intercept1;
+        cout << "The intersection point of the two lines is: x=" << x << " "
+             << "y=" << y << endl;
+    }
+}
+
 int main()
 {
 
@@ -98,8 +119,9 @@ int main()
             "1. Check whether a point lies on a line\n"
             "2. From a line g and a point p , derive an equation of a line that is parallel to g and passes through p\n"
             "3. Given a line g and a point p lying on it, derive an equation of a line perpendicular to g with a fifth at p\n"
+            "4. Given two lines, find their intersection if it exists\n"
 
-            "4.Exit \n";
+            "5.Exit \n";
 
     while (true)
     {
@@ -131,7 +153,10 @@ int main()
             perpendicularLine();
             break;
 
-        case '4':
+        case '4':intersectionOfTwoLines();
+            break;
+
+        case '5':
             return 0;
         }
     }
