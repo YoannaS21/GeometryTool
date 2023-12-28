@@ -10,6 +10,7 @@ double inputPointX()
     cin >> X;
     return X;
 }
+
 double inputPointY()
 {
     cout << "Enter y coordinate of the point: ";
@@ -58,7 +59,35 @@ void parallelLine()
 
     if (parallelIntercept != intercept)
     {
-        cout << "The equasion of the parallel line is: y=" << parallelSlope << "x+" << parallelIntercept;
+        cout << "The equasion of the parallel line is: y=" << parallelSlope << "x+"
+             << "(" << parallelIntercept << ")";
+    }
+    else
+    {
+        cout << "The two lines coincide." << endl;
+    }
+}
+
+void perpendicularLine()
+{
+    if (isPointOnLine() == true)
+    {
+        double x = inputPointX();
+        double y = inputPointY();
+        double slope = inputLineSlope();
+
+        if (slope != 0)
+        {
+            double perpendicularSlope = -1 / slope;
+            double perpendicularIntercept = y - (perpendicularSlope * x);
+            cout << "Equasion of the perpendicular line : y=" << perpendicularSlope << "x+"
+                 << "(" << perpendicularIntercept << ")" << endl;
+        }
+    }
+
+    else
+    {
+        cout << "The point that you entered does not lie on the line." << endl;
     }
 }
 
@@ -68,7 +97,9 @@ int main()
     cout << "\n Choose a tool:\n"
             "1. Check whether a point lies on a line\n"
             "2. From a line g and a point p , derive an equation of a line that is parallel to g and passes through p\n"
-            "3.Exit \n";
+            "3. Given a line g and a point p lying on it, derive an equation of a line perpendicular to g with a fifth at p\n"
+
+            "4.Exit \n";
 
     while (true)
     {
@@ -79,6 +110,7 @@ int main()
         switch (choice)
         {
         case '1':
+
             if (isPointOnLine() == true)
             {
                 cout << "The point lies on the line." << endl;
@@ -95,6 +127,11 @@ int main()
             break;
 
         case '3':
+
+            perpendicularLine();
+            break;
+
+        case '4':
             return 0;
         }
     }
