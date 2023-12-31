@@ -122,7 +122,7 @@ double slopeOflineByTwoPoints(double x1, double y1, double x2, double y2)
     return slope;
 }
 
-void height(double slope, double x, double y)
+void constructHeightEqasion(double slope, double x, double y)
 {
     if (slope != 0)
     {
@@ -145,14 +145,45 @@ void caseHeights(double x1, double y1, double x2, double y2, double x3, double y
         double slopeOfB = slopeOflineByTwoPoints(x2, y2, x3, y3);
         double slopeOfC = slopeOflineByTwoPoints(x3, y3, x1, y1);
         cout << "The eqasions of the heights are:" << endl;
-        height(slopeOfA, x3, y3);
-        height(slopeOfB, x1, y1);
-        height(slopeOfC, x2, y2);
+        constructHeightEqasion(slopeOfA, x3, y3);
+        constructHeightEqasion(slopeOfB, x1, y1);
+        constructHeightEqasion(slopeOfC, x2, y2);
     }
     else
     {
         cout << "The points youi entered don't make a triangle." << endl;
     }
+}
+
+double middleX(double x1, double x2)
+{
+
+    return (x1 + x2) / 2;
+}
+
+double middleY(double y1, double y2)
+{
+
+    return (y1 + y2) / 2;
+}
+
+void equasionOfALineByTwoPoints(double x1, double y1, double x2, double y2)
+{
+    double A = y2 - y1;
+    double B = -(x2 - x1);
+    double C = -x1 * (y2 - y1) - (x2 - x1) * (-y1);
+    double slope = -A / B;
+    double intercept = -C / B;
+
+    cout << "y= " << slope << "x + " << (intercept)<<endl;;
+}
+
+void caseMedians(double x1, double y1, double x2, double y2, double x3, double y3)
+{
+    cout<<"The equasions of the medians are: "<<endl;
+    equasionOfALineByTwoPoints(x1, y1, middleX(x2, x3), middleY(y2, y3));
+    equasionOfALineByTwoPoints(x2, y2, middleX(x1, x3), middleY(y1, y3));
+    equasionOfALineByTwoPoints(x3, y3, middleX(x1, x2), middleY(y1, y2));
 }
 
 int main()
@@ -164,8 +195,8 @@ int main()
             "3. Given a line g and a point p lying on it, derive an equation of a line perpendicular to g with a fifth at p\n"
             "4. Given two lines, find their intersection if it exists\n"
             "5. By triangle (set by three points) constructs equations of the heights:\n"
-            "6. By triangle (set by three points) constructs equations of the :\n"
-            "7. By triangle (set by three points) constructs equations of the heights:\n"
+            "6. By triangle (set by three points) constructs equations of the medians:\n"
+            "7. By triangle (set by three points) constructs equations of the bisectors :\n"
 
             "8.Exit \n";
 
@@ -208,6 +239,10 @@ int main()
             break;
 
         case '6':
+        caseMedians(inputPointX(), inputPointY(), inputPointX(), inputPointY(), inputPointX(), inputPointY());
+            break;
+
+        case '8':
             return 0;
         }
     }
