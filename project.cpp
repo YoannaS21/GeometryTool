@@ -36,23 +36,15 @@ double inputLineIntercept()
     return intercept;
 }
 
-bool isPointOnLine()
+bool isPointOnLine(double x, double y, double slope, double intercept)
 {
-    double x = inputPointX();
-    double y = inputPointY();
-    double slope = inputLineSlope();
-    double intercept = inputLineIntercept();
 
     double calculation = abs(y - (slope * x + intercept));
     return calculation < __DBL_EPSILON__;
 }
 
-void parallelLine()
+void parallelLine(double x, double y, double slope, double intercept)
 {
-    double x = inputPointX();
-    double y = inputPointY();
-    double slope = inputLineSlope();
-    double intercept = inputLineIntercept();
 
     double parallelSlope = slope;
     double parallelIntercept = (y - parallelSlope * x);
@@ -68,13 +60,10 @@ void parallelLine()
     }
 }
 
-void perpendicularLine()
+void perpendicularLine(double x, double y, double slope, double intercept)
 {
-    if (isPointOnLine() == true)
+    if (isPointOnLine(x, y, slope, intercept) == true)
     {
-        double x = inputPointX();
-        double y = inputPointY();
-        double slope = inputLineSlope();
 
         if (slope != 0)
         {
@@ -91,12 +80,8 @@ void perpendicularLine()
     }
 }
 
-void intersectionOfTwoLines()
+void intersectionOfTwoLines(double slope1, double intercept1, double slope2, double intercept2)
 {
-    double slope1 = inputLineSlope();
-    double intercept1 = inputLineIntercept();
-    double slope2 = inputLineSlope();
-    double intercept2 = inputLineIntercept();
 
     if (abs(slope1 - slope2) < __DBL_EPSILON__)
     {
@@ -112,6 +97,64 @@ void intersectionOfTwoLines()
     }
 }
 
+double distanceBetweenTwoPoints(double x1, double y1, double x2, double y2)
+{
+    double distance = sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2));
+    return distance;
+}
+
+bool isTriangle(double a, double b, double c)
+{
+    if (a < (b + c) && b < (c + a) && c < (a + b))
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+double slopeOflineByTwoPoints(double x1, double y1, double x2, double y2)
+{
+
+    double slope = (x2 - x1) / (y2 - y1);
+    return slope;
+}
+
+void height(double slope, double x, double y)
+{
+    if (slope != 0)
+    {
+        double heightSlope = -1 / slope;
+        double heightIntercept = y - (heightSlope * x);
+        cout << "y=" << heightSlope << "x+"
+             << "(" << heightIntercept << ")" << endl;
+    }
+}
+
+void caseHeights(double x1, double y1, double x2, double y2, double x3, double y3)
+{
+    double a = distanceBetweenTwoPoints(x1, y1, x2, y2);
+    double b = distanceBetweenTwoPoints(x2, y2, x3, y3);
+    double c = distanceBetweenTwoPoints(x1, y1, x3, y3);
+
+    if (isTriangle(a, b, c) == true)
+    {
+        double slopeOfA = slopeOflineByTwoPoints(x1, y1, x2, y2);
+        double slopeOfB = slopeOflineByTwoPoints(x2, y2, x3, y3);
+        double slopeOfC = slopeOflineByTwoPoints(x3, y3, x1, y1);
+        cout << "The eqasions of the heights are:" << endl;
+        height(slopeOfA, x3, y3);
+        height(slopeOfB, x1, y1);
+        height(slopeOfC, x2, y2);
+    }
+    else
+    {
+        cout << "The points youi entered don't make a triangle." << endl;
+    }
+}
+
 int main()
 {
 
@@ -120,8 +163,11 @@ int main()
             "2. From a line g and a point p , derive an equation of a line that is parallel to g and passes through p\n"
             "3. Given a line g and a point p lying on it, derive an equation of a line perpendicular to g with a fifth at p\n"
             "4. Given two lines, find their intersection if it exists\n"
+            "5. By triangle (set by three points) constructs equations of the heights:\n"
+            "6. By triangle (set by three points) constructs equations of the :\n"
+            "7. By triangle (set by three points) constructs equations of the heights:\n"
 
-            "5.Exit \n";
+            "8.Exit \n";
 
     while (true)
     {
@@ -133,7 +179,7 @@ int main()
         {
         case '1':
 
-            if (isPointOnLine() == true)
+            if (isPointOnLine(inputPointX(), inputPointY(), inputLineSlope(), inputLineIntercept()) == true)
             {
                 cout << "The point lies on the line." << endl;
             }
@@ -145,18 +191,23 @@ int main()
             break;
 
         case '2':
-            parallelLine();
+            parallelLine(inputPointX(), inputPointY(), inputLineSlope(), inputLineIntercept());
             break;
 
         case '3':
 
-            perpendicularLine();
+            perpendicularLine(inputPointX(), inputPointY(), inputLineSlope(), inputLineIntercept());
             break;
 
-        case '4':intersectionOfTwoLines();
+        case '4':
+            intersectionOfTwoLines(inputLineSlope(), inputLineIntercept(), inputLineSlope(), inputLineIntercept());
             break;
 
         case '5':
+            caseHeights(inputPointX(), inputPointY(), inputPointX(), inputPointY(), inputPointX(), inputPointY());
+            break;
+
+        case '6':
             return 0;
         }
     }
