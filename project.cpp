@@ -118,7 +118,9 @@ bool isTriangle(double a, double b, double c)
 double slopeOflineByTwoPoints(double x1, double y1, double x2, double y2)
 {
 
-    double slope = (x2 - x1) / (y2 - y1);
+    double A = y2 - y1;
+    double B = -(x2 - x1);
+    double slope = -A / B;
     return slope;
 }
 
@@ -175,15 +177,30 @@ void equasionOfALineByTwoPoints(double x1, double y1, double x2, double y2)
     double slope = -A / B;
     double intercept = -C / B;
 
-    cout << "y= " << slope << "x + " << (intercept)<<endl;;
+    cout << "y= " << slope << "x + " << (intercept) << endl;
+    ;
 }
 
 void caseMedians(double x1, double y1, double x2, double y2, double x3, double y3)
 {
-    cout<<"The equasions of the medians are: "<<endl;
+    cout << "The equasions of the medians are: " << endl;
     equasionOfALineByTwoPoints(x1, y1, middleX(x2, x3), middleY(y2, y3));
     equasionOfALineByTwoPoints(x2, y2, middleX(x1, x3), middleY(y1, y3));
     equasionOfALineByTwoPoints(x3, y3, middleX(x1, x2), middleY(y1, y2));
+}
+
+void caseBisectors(double x1, double y1, double x2, double y2, double x3, double y3)
+{
+    //The bisector is perpendicular and passes in the middle of the line 
+    //so we can use the function for the heights
+    //but with the middle point
+    double slopeOfA = slopeOflineByTwoPoints(x1, y1, x2, y2);
+    double slopeOfB = slopeOflineByTwoPoints(x2, y2, x3, y3);
+    double slopeOfC = slopeOflineByTwoPoints(x3, y3, x1, y1);
+    cout << "The eqasions of the bisectors are:" << endl;
+    constructHeightEqasion(slopeOfA, middleX(x1, x2), middleY(y1, y2));
+    constructHeightEqasion(slopeOfB, middleX(x2, x3), middleY(y2, y3));
+    constructHeightEqasion(slopeOfC, middleX(x3, x1), middleY(y3, y1));
 }
 
 int main()
@@ -239,7 +256,10 @@ int main()
             break;
 
         case '6':
-        caseMedians(inputPointX(), inputPointY(), inputPointX(), inputPointY(), inputPointX(), inputPointY());
+            caseMedians(inputPointX(), inputPointY(), inputPointX(), inputPointY(), inputPointX(), inputPointY());
+            break;
+
+        case '7':caseBisectors(inputPointX(), inputPointY(), inputPointX(), inputPointY(), inputPointX(), inputPointY());
             break;
 
         case '8':
