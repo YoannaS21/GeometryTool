@@ -56,7 +56,7 @@ Line inputLine()
 bool isPointOnLine(Point p, Line l)
 {
     double calculation = std::abs(p.y - (l.slope * p.x + l.intercept));
-    return calculation < std::numeric_limits<double>::epsilon();
+    return calculation < __DBL_EPSILON__;
 }
 
 void parallelLine(Point p, Line l)
@@ -101,7 +101,6 @@ Point intersectionOfTwoLines(Line l1, Line l2)
 
     intersection.x = (l2.intercept - l1.intercept) / (l1.slope - l2.slope);
     intersection.y = l1.slope * intersection.x + l1.intercept;
-    // std::cout << "The intersection point of the two lines is: x=" << intersection.x << " y=" << intersection.y << "\n";
     return intersection;
 }
 
@@ -267,10 +266,47 @@ void intersectonPointsParabolaAnbLine(Parabola par, Line l)
     }
 }
 
-// void quadrilateralFormedByLines(Line l1, Line l2, Line l3, Line l4)
-// {
+bool compareTwoDoubleNums(double num1, double num2)
+{
+    return abs(num1 - num2) < std::numeric_limits<double>::epsilon();
+}
 
-// }
+bool doTheLinesMakeAQuadrilateral(Line l1, Line l2, Line l3, Line l4)
+{
+    // Check for equal lines
+    if ((compareTwoDoubleNums(l1.slope, l2.slope) && compareTwoDoubleNums(l1.intercept, l2.intercept)) ||
+        (compareTwoDoubleNums(l2.slope, l3.slope) && compareTwoDoubleNums(l2.intercept, l3.intercept)) ||
+        (compareTwoDoubleNums(l3.slope, l4.slope) && compareTwoDoubleNums(l3.intercept, l4.intercept)) ||
+        (compareTwoDoubleNums(l1.slope, l4.slope) && compareTwoDoubleNums(l1.intercept, l4.intercept)))
+    {
+        return false;
+    }
+
+    // check for three parallel lines
+    if ((compareTwoDoubleNums(l1.slope, l2.slope) && compareTwoDoubleNums(l2.slope, l3.slope)) ||
+        (compareTwoDoubleNums(l2.slope, l3.slope) && compareTwoDoubleNums(l3.slope, l4.slope)) ||
+        (compareTwoDoubleNums(l1.slope, l2.slope) && compareTwoDoubleNums(l2.slope, l4.slope)) ||
+        (compareTwoDoubleNums(l1.slope, l3.slope) && compareTwoDoubleNums(l3.slope, l4.slope)))
+
+    {
+        return false;
+    }
+
+    return true;
+}
+
+void quadrilateralFormedByLines(Line l1, Line l2, Line l3, Line l4)
+{
+    Point A = intersectionOfTwoLines(l1, l2);
+    Point B = intersectionOfTwoLines(l2, l3);
+    Point C = intersectionOfTwoLines(l3, l4);
+    Point D = intersectionOfTwoLines(l1, l4);
+
+    double AB = distanceBetweenTwoPoints(A, B);
+    double BC = distanceBetweenTwoPoints(B, C);
+    double CD = distanceBetweenTwoPoints(C, D);
+    double AD = distanceBetweenTwoPoints(A, C);
+}
 
 int main()
 {
@@ -381,11 +417,18 @@ int main()
 
         case '9':
         {
-            // Line l1 = inputLine();
-            // Line l2 = inputLine();
-            // Line l3 = inputLine();
-            // Line l4 = inputLine();
-            // quadrilateralFormedByLines(l1, l2, l3, l4);
+            Line l1 = inputLine();
+            Line l2 = inputLine();
+            Line l3 = inputLine();
+            Line l4 = inputLine();
+            if (doTheLinesMakeAQuadrilateral(l1, l2, l3, l4) == false)
+            {
+                std::cout << "The lines don't make a quadrilateral.";
+            }
+            else
+            {
+                //quadrilateralFormedByLines(l1, l2, l3, l4);
+            }
         }
 
         break;
