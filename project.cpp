@@ -13,6 +13,26 @@ struct Line
     double intercept;
 };
 
+struct Parabola
+{
+    double a;
+    double b;
+    double c;
+};
+
+Parabola inputParabola()
+{
+    Parabola par;
+    std::cout << "Enter a coordinate of the parabola: ";
+    std::cin >> par.a;
+    std::cout << "Enter b coordinate of the parabola: ";
+    std::cin >> par.b;
+    std::cout << "Enter c coordinate of the parabola: ";
+    std::cin >> par.c;
+
+    return par;
+}
+
 Point inputPoint()
 {
     Point p;
@@ -177,17 +197,79 @@ void caseBisectors(Point p1, Point p2, Point p3)
     constructHeightEquation(slopeOfC, middlePoint(p3, p1));
 }
 
+void tangentOfParabolaEquasion(Parabola par, Point p)
+{
+    // If ax^2 +bx+c=0 for x=p.x
+    // because the point is on the real line y should be 0
+    if ((par.a * pow(p.x, 2) + par.b * p.x + par.c == 0) && (p.y == 0))
+    {
+
+        // first derative
+        double slope = 2 * par.a * p.x + par.b;
+        // the eqasion is going to be in the form y=kx+m
+        double k = slope;
+        double m = p.y - k * p.x;
+        std::cout << "The eqasion of the tangent is: y = " << k << "x + "
+                  << "(" << m << ")"
+                  << "\n ";
+    }
+    else
+    {
+        std::cout << "The point in not on the parabola or the pont is not on the real line";
+    }
+}
+
+void intersectonPointsParabolaAnbLine(Parabola par, Line l)
+{
+    // we solve the eqasion
+    // ax^2+bx+c=kx+m
+    // so we have ax^2+(b-k)x+c-m=0
+    double A = par.a;
+    double B = par.b - l.slope;
+    double C = par.c - l.intercept;
+
+    double discriminant = B * B - 4 * A * C;
+
+    if (discriminant < 0)
+    {
+        std::cout << "No real roots.The parabola and the line don't intersect.\n";
+    }
+    else if (discriminant > 0)
+    {
+        double x1 = (-B + std::sqrt(discriminant)) / (2 * A);
+        double x2 = (-B - std::sqrt(discriminant)) / (2 * A);
+
+        double y1 = l.slope * x1 + l.intercept;
+        double y2 = l.slope * x2 + l.intercept;
+
+        std::cout << "The insertion ponts are: \n";
+        std::cout << "(" << x1 << ", " << y1 << ")\n";
+        std::cout << "(" << x2 << ", " << y2 << ")\n";
+    }
+    else if (discriminant == 0)
+    {
+        double x = -B / 2 * A;
+        double y = l.slope * x + l.intercept;
+
+        std::cout << "The insertion point is: ";
+        std::cout << "(" << x << ", " << y << ")\n";
+    }
+}
+
 int main()
 {
     std::cout << "\n Choose a tool:\n"
-                 "1. Check whether a point lies on a line\n"
-                 "2. From a line g and a point p, derive an equation of a line that is parallel to g and passes through p\n"
-                 "3. Given a line g and a point p lying on it, derive an equation of a line perpendicular to g with a fifth at p\n"
-                 "4. Given two lines, find their intersection if it exists\n"
-                 "5. By triangle (set by three points) constructs equations of the heights:\n"
-                 "6. By triangle (set by three points) constructs equations of the medians:\n"
-                 "7. By triangle (set by three points) constructs equations of the bisectors :\n"
-                 "8.Exit \n";
+                 "0. Check whether a point lies on a line\n"
+                 "1. From a line g and a point p, derive an equation of a line that is parallel to g and passes through p\n"
+                 "2. Given a line g and a point p lying on it, derive an equation of a line perpendicular to g with a fifth at p\n"
+                 "3. Given two lines, find their intersection if it exists\n"
+                 "4. By triangle (set by three points) constructs equations of the heights:\n"
+                 "5. By triangle (set by three points) constructs equations of the medians:\n"
+                 "6. By triangle (set by three points) constructs equations of the bisectors :\n"
+                 "7. From a given equation of a parabola and a poit on the real line derive the equation of the tangent:\n"
+                 "8. From given equations parabola and line to derive their insertion points:\n"
+
+                 "E.Exit \n";
 
     while (true)
     {
@@ -197,7 +279,7 @@ int main()
 
         switch (choice)
         {
-        case '1':
+        case '0':
         {
             Point p = inputPoint();
             Line l = inputLine();
@@ -211,28 +293,28 @@ int main()
             }
             break;
         }
-        case '2':
+        case '1':
         {
             Point p = inputPoint();
             Line l = inputLine();
             parallelLine(p, l);
             break;
         }
-        case '3':
+        case '2':
         {
             Point p = inputPoint();
             Line l = inputLine();
             perpendicularLine(p, l);
             break;
         }
-        case '4':
+        case '3':
         {
             Line l1 = inputLine();
             Line l2 = inputLine();
             intersectionOfTwoLines(l1, l2);
             break;
         }
-        case '5':
+        case '4':
         {
             Point p1 = inputPoint();
             Point p2 = inputPoint();
@@ -240,7 +322,7 @@ int main()
             caseHeights(p1, p2, p3);
             break;
         }
-        case '6':
+        case '5':
         {
             Point p1 = inputPoint();
             Point p2 = inputPoint();
@@ -248,7 +330,7 @@ int main()
             caseMedians(p1, p2, p3);
             break;
         }
-        case '7':
+        case '6':
         {
             Point p1 = inputPoint();
             Point p2 = inputPoint();
@@ -256,9 +338,24 @@ int main()
             caseBisectors(p1, p2, p3);
             break;
         }
+        case '7':
+        {
+            Parabola par = inputParabola();
+            Point p = inputPoint();
+            tangentOfParabolaEquasion(par, p);
+        }
+        break;
+
         case '8':
+        {
+            Parabola par = inputParabola();
+            Line l = inputLine();
+            intersectonPointsParabolaAnbLine(par, l);
+        }
+        break;
+
+        case 'E':
             return 0;
         }
     }
 }
-
