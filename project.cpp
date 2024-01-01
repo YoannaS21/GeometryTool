@@ -114,8 +114,11 @@ double distanceBetweenTwoPoints(Point p1, Point p2)
     return sqrt(pow(p2.x - p1.x, 2) + pow(p2.y - p1.y, 2));
 }
 
-bool isTriangle(double a, double b, double c)
+bool isTriangle(Point p1, Point p2, Point p3)
 {
+    double a = distanceBetweenTwoPoints(p1, p2);
+    double b = distanceBetweenTwoPoints(p2, p3);
+    double c = distanceBetweenTwoPoints(p1, p3);
     return a < (b + c) && b < (c + a) && c < (a + b);
 }
 
@@ -139,11 +142,8 @@ void constructHeightEquation(double slope, Point p)
 
 void caseHeights(Point p1, Point p2, Point p3)
 {
-    double a = distanceBetweenTwoPoints(p1, p2);
-    double b = distanceBetweenTwoPoints(p2, p3);
-    double c = distanceBetweenTwoPoints(p1, p3);
 
-    if (isTriangle(a, b, c))
+    if (isTriangle(p1, p2, p3))
     {
         double slopeOfA = slopeOfLineByTwoPoints(p1, p2);
         double slopeOfB = slopeOfLineByTwoPoints(p2, p3);
@@ -180,21 +180,36 @@ void equationOfALineByTwoPoints(Point p1, Point p2)
 
 void caseMedians(Point p1, Point p2, Point p3)
 {
-    std::cout << "The equations of the medians are:\n";
-    equationOfALineByTwoPoints(p1, middlePoint(p2, p3));
-    equationOfALineByTwoPoints(p2, middlePoint(p1, p3));
-    equationOfALineByTwoPoints(p3, middlePoint(p1, p2));
+    if (isTriangle(p1, p2, p3))
+    {
+
+        std::cout << "The equations of the medians are:\n";
+        equationOfALineByTwoPoints(p1, middlePoint(p2, p3));
+        equationOfALineByTwoPoints(p2, middlePoint(p1, p3));
+        equationOfALineByTwoPoints(p3, middlePoint(p1, p2));
+    }
+    else
+    {
+        std::cout << "The points you entered don't make a triangle.\n";
+    }
 }
 
 void caseBisectors(Point p1, Point p2, Point p3)
 {
-    double slopeOfA = slopeOfLineByTwoPoints(p1, p2);
-    double slopeOfB = slopeOfLineByTwoPoints(p2, p3);
-    double slopeOfC = slopeOfLineByTwoPoints(p3, p1);
-    std::cout << "The equations of the bisectors are:\n";
-    constructHeightEquation(slopeOfA, middlePoint(p1, p2));
-    constructHeightEquation(slopeOfB, middlePoint(p2, p3));
-    constructHeightEquation(slopeOfC, middlePoint(p3, p1));
+    if (isTriangle(p1, p2, p3))
+    {
+        double slopeOfA = slopeOfLineByTwoPoints(p1, p2);
+        double slopeOfB = slopeOfLineByTwoPoints(p2, p3);
+        double slopeOfC = slopeOfLineByTwoPoints(p3, p1);
+        std::cout << "The equations of the bisectors are:\n";
+        constructHeightEquation(slopeOfA, middlePoint(p1, p2));
+        constructHeightEquation(slopeOfB, middlePoint(p2, p3));
+        constructHeightEquation(slopeOfC, middlePoint(p3, p1));
+    }
+    else
+    {
+        std::cout << "The points you entered don't make a triangle.\n";
+    }
 }
 
 void tangentOfParabolaEquasion(Parabola par, Point p)
@@ -242,7 +257,7 @@ void intersectonPointsParabolaAnbLine(Parabola par, Line l)
         double y1 = l.slope * x1 + l.intercept;
         double y2 = l.slope * x2 + l.intercept;
 
-        std::cout << "The insertion ponts are: \n";
+        std::cout << "The insertion points are: \n";
         std::cout << "(" << x1 << ", " << y1 << ")\n";
         std::cout << "(" << x2 << ", " << y2 << ")\n";
     }
