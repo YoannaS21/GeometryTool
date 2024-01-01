@@ -46,9 +46,9 @@ Point inputPoint()
 Line inputLine()
 {
     Line l;
-    std::cout << "Enter slope: ";
+    std::cout << "Enter slope of the line: ";
     std::cin >> l.slope;
-    std::cout << "Enter intercept: ";
+    std::cout << "Enter intercept of the line: ";
     std::cin >> l.intercept;
     return l;
 }
@@ -95,18 +95,14 @@ void perpendicularLine(Point p, Line l)
     }
 }
 
-void intersectionOfTwoLines(Line l1, Line l2)
+Point intersectionOfTwoLines(Line l1, Line l2)
 {
-    if (std::abs(l1.slope - l2.slope) < std::numeric_limits<double>::epsilon())
-    {
-        std::cout << "The two lines don't intersect.\n";
-    }
-    else
-    {
-        double x = (l2.intercept - l1.intercept) / (l1.slope - l2.slope);
-        double y = l1.slope * x + l1.intercept;
-        std::cout << "The intersection point of the two lines is: x=" << x << " y=" << y << "\n";
-    }
+    Point intersection;
+
+    intersection.x = (l2.intercept - l1.intercept) / (l1.slope - l2.slope);
+    intersection.y = l1.slope * intersection.x + l1.intercept;
+    // std::cout << "The intersection point of the two lines is: x=" << intersection.x << " y=" << intersection.y << "\n";
+    return intersection;
 }
 
 double distanceBetweenTwoPoints(Point p1, Point p2)
@@ -230,7 +226,7 @@ void tangentOfParabolaEquasion(Parabola par, Point p)
     }
     else
     {
-        std::cout << "The point in not on the parabola or the pont is not on the real line";
+        std::cout << "The point is not on the parabola or the point is not on the real line";
     }
 }
 
@@ -271,6 +267,11 @@ void intersectonPointsParabolaAnbLine(Parabola par, Line l)
     }
 }
 
+// void quadrilateralFormedByLines(Line l1, Line l2, Line l3, Line l4)
+// {
+
+// }
+
 int main()
 {
     std::cout << "\n Choose a tool:\n"
@@ -282,7 +283,8 @@ int main()
                  "5. By triangle (set by three points) constructs equations of the medians:\n"
                  "6. By triangle (set by three points) constructs equations of the bisectors :\n"
                  "7. From a given equation of a parabola and a poit on the real line derive the equation of the tangent:\n"
-                 "8. From given equations parabola and line to derive their insertion points:\n"
+                 "8. From given equations of parabola and line to derive their insertion points:\n"
+                 "9. Given four equations of lines, determine the type of quadrilateral they form when they intersect:\n"
 
                  "E.Exit \n";
 
@@ -326,7 +328,15 @@ int main()
         {
             Line l1 = inputLine();
             Line l2 = inputLine();
-            intersectionOfTwoLines(l1, l2);
+            if (std::abs(l1.slope - l2.slope) < std::numeric_limits<double>::epsilon())
+            {
+                std::cout << "The two lines don't intersect.\n";
+            }
+            else
+            {
+                Point intersection = intersectionOfTwoLines(l1, l2);
+                std::cout << "The intersection point of the two lines is: x=" << intersection.x << " y=" << intersection.y << "\n";
+            }
             break;
         }
         case '4':
@@ -367,6 +377,17 @@ int main()
             Line l = inputLine();
             intersectonPointsParabolaAnbLine(par, l);
         }
+        break;
+
+        case '9':
+        {
+            // Line l1 = inputLine();
+            // Line l2 = inputLine();
+            // Line l3 = inputLine();
+            // Line l4 = inputLine();
+            // quadrilateralFormedByLines(l1, l2, l3, l4);
+        }
+
         break;
 
         case 'E':
