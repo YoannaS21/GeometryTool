@@ -1,269 +1,264 @@
 #include <iostream>
 #include <cmath>
-using namespace std;
 
-double inputPointX()
+struct Point
 {
+    double x;
+    double y;
+};
 
-    cout << "Enter x coordinate of the point: ";
-    double X;
-    cin >> X;
-    return X;
-}
-
-double inputPointY()
+struct Line
 {
-    cout << "Enter y coordinate of the point: ";
-    double Y;
-    cin >> Y;
-    return Y;
-}
-
-double inputLineSlope()
-{
-
-    cout << "Enter slope:";
     double slope;
-    cin >> slope;
-    return slope;
-}
-
-double inputLineIntercept()
-{
-    cout << "Enter intercept:";
     double intercept;
-    cin >> intercept;
-    return intercept;
+};
+
+Point inputPoint()
+{
+    Point p;
+    std::cout << "Enter x coordinate of the point: ";
+    std::cin >> p.x;
+    std::cout << "Enter y coordinate of the point: ";
+    std::cin >> p.y;
+    return p;
 }
 
-bool isPointOnLine(double x, double y, double slope, double intercept)
+Line inputLine()
 {
-
-    double calculation = abs(y - (slope * x + intercept));
-    return calculation < __DBL_EPSILON__;
+    Line l;
+    std::cout << "Enter slope: ";
+    std::cin >> l.slope;
+    std::cout << "Enter intercept: ";
+    std::cin >> l.intercept;
+    return l;
 }
 
-void parallelLine(double x, double y, double slope, double intercept)
+bool isPointOnLine(Point p, Line l)
 {
+    double calculation = std::abs(p.y - (l.slope * p.x + l.intercept));
+    return calculation < std::numeric_limits<double>::epsilon();
+}
 
-    double parallelSlope = slope;
-    double parallelIntercept = (y - parallelSlope * x);
+void parallelLine(Point p, Line l)
+{
+    Line parallelLine;
+    parallelLine.slope = l.slope;
+    parallelLine.intercept = p.y - parallelLine.slope * p.x;
 
-    if (parallelIntercept != intercept)
+    if (parallelLine.intercept != l.intercept)
     {
-        cout << "The equasion of the parallel line is: y=" << parallelSlope << "x+"
-             << "(" << parallelIntercept << ")";
+        std::cout << "The equation of the parallel line is: y=" << parallelLine.slope
+                  << "x+(" << parallelLine.intercept << ")\n";
     }
     else
     {
-        cout << "The two lines coincide." << endl;
+        std::cout << "The two lines coincide.\n";
     }
 }
 
-void perpendicularLine(double x, double y, double slope, double intercept)
+void perpendicularLine(Point p, Line l)
 {
-    if (isPointOnLine(x, y, slope, intercept) == true)
+    if (isPointOnLine(p, l))
     {
-
-        if (slope != 0)
+        if (l.slope != 0)
         {
-            double perpendicularSlope = -1 / slope;
-            double perpendicularIntercept = y - (perpendicularSlope * x);
-            cout << "Equasion of the perpendicular line : y=" << perpendicularSlope << "x+"
-                 << "(" << perpendicularIntercept << ")" << endl;
+            Line perpendicularLine;
+            perpendicularLine.slope = -1 / l.slope;
+            perpendicularLine.intercept = p.y - (perpendicularLine.slope * p.x);
+            std::cout << "Equation of the perpendicular line: y=" << perpendicularLine.slope
+                      << "x+(" << perpendicularLine.intercept << ")\n";
         }
     }
-
     else
     {
-        cout << "The point that you entered does not lie on the line." << endl;
+        std::cout << "The point that you entered does not lie on the line.\n";
     }
 }
 
-void intersectionOfTwoLines(double slope1, double intercept1, double slope2, double intercept2)
+void intersectionOfTwoLines(Line l1, Line l2)
 {
-
-    if (abs(slope1 - slope2) < __DBL_EPSILON__)
+    if (std::abs(l1.slope - l2.slope) < std::numeric_limits<double>::epsilon())
     {
-        cout << "The two lines don't intersect.";
-        return;
+        std::cout << "The two lines don't intersect.\n";
     }
     else
     {
-        double x = (intercept2 - intercept1) / (slope1 - slope2);
-        double y = slope1 * x + intercept1;
-        cout << "The intersection point of the two lines is: x=" << x << " "
-             << "y=" << y << endl;
+        double x = (l2.intercept - l1.intercept) / (l1.slope - l2.slope);
+        double y = l1.slope * x + l1.intercept;
+        std::cout << "The intersection point of the two lines is: x=" << x << " y=" << y << "\n";
     }
 }
 
-double distanceBetweenTwoPoints(double x1, double y1, double x2, double y2)
+double distanceBetweenTwoPoints(Point p1, Point p2)
 {
-    double distance = sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2));
-    return distance;
+    return sqrt(pow(p2.x - p1.x, 2) + pow(p2.y - p1.y, 2));
 }
 
 bool isTriangle(double a, double b, double c)
 {
-    if (a < (b + c) && b < (c + a) && c < (a + b))
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
+    return a < (b + c) && b < (c + a) && c < (a + b);
 }
 
-double slopeOflineByTwoPoints(double x1, double y1, double x2, double y2)
+double slopeOfLineByTwoPoints(Point p1, Point p2)
 {
-
-    double A = y2 - y1;
-    double B = -(x2 - x1);
-    double slope = -A / B;
-    return slope;
+    double A = p2.y - p1.y;
+    double B = -(p2.x - p1.x);
+    return -A / B;
 }
 
-void constructHeightEqasion(double slope, double x, double y)
+void constructHeightEquation(double slope, Point p)
 {
     if (slope != 0)
     {
-        double heightSlope = -1 / slope;
-        double heightIntercept = y - (heightSlope * x);
-        cout << "y=" << heightSlope << "x+"
-             << "(" << heightIntercept << ")" << endl;
+        Line heightLine;
+        heightLine.slope = -1 / slope;
+        heightLine.intercept = p.y - (heightLine.slope * p.x);
+        std::cout << "y=" << heightLine.slope << "x+(" << heightLine.intercept << ")\n";
     }
 }
 
-void caseHeights(double x1, double y1, double x2, double y2, double x3, double y3)
+void caseHeights(Point p1, Point p2, Point p3)
 {
-    double a = distanceBetweenTwoPoints(x1, y1, x2, y2);
-    double b = distanceBetweenTwoPoints(x2, y2, x3, y3);
-    double c = distanceBetweenTwoPoints(x1, y1, x3, y3);
+    double a = distanceBetweenTwoPoints(p1, p2);
+    double b = distanceBetweenTwoPoints(p2, p3);
+    double c = distanceBetweenTwoPoints(p1, p3);
 
-    if (isTriangle(a, b, c) == true)
+    if (isTriangle(a, b, c))
     {
-        double slopeOfA = slopeOflineByTwoPoints(x1, y1, x2, y2);
-        double slopeOfB = slopeOflineByTwoPoints(x2, y2, x3, y3);
-        double slopeOfC = slopeOflineByTwoPoints(x3, y3, x1, y1);
-        cout << "The eqasions of the heights are:" << endl;
-        constructHeightEqasion(slopeOfA, x3, y3);
-        constructHeightEqasion(slopeOfB, x1, y1);
-        constructHeightEqasion(slopeOfC, x2, y2);
+        double slopeOfA = slopeOfLineByTwoPoints(p1, p2);
+        double slopeOfB = slopeOfLineByTwoPoints(p2, p3);
+        double slopeOfC = slopeOfLineByTwoPoints(p3, p1);
+        std::cout << "The equations of the heights are:\n";
+        constructHeightEquation(slopeOfA, p3);
+        constructHeightEquation(slopeOfB, p1);
+        constructHeightEquation(slopeOfC, p2);
     }
     else
     {
-        cout << "The points youi entered don't make a triangle." << endl;
+        std::cout << "The points you entered don't make a triangle.\n";
     }
 }
 
-double middleX(double x1, double x2)
+Point middlePoint(Point p1, Point p2)
 {
-
-    return (x1 + x2) / 2;
+    Point middle;
+    middle.x = (p1.x + p2.x) / 2;
+    middle.y = (p1.y + p2.y) / 2;
+    return middle;
 }
 
-double middleY(double y1, double y2)
+void equationOfALineByTwoPoints(Point p1, Point p2)
 {
-
-    return (y1 + y2) / 2;
-}
-
-void equasionOfALineByTwoPoints(double x1, double y1, double x2, double y2)
-{
-    double A = y2 - y1;
-    double B = -(x2 - x1);
-    double C = -x1 * (y2 - y1) - (x2 - x1) * (-y1);
+    double A = p2.y - p1.y;
+    double B = -(p2.x - p1.x);
+    double C = -p1.x * (p2.y - p1.y) - (p2.x - p1.x) * (-p1.y);
     double slope = -A / B;
     double intercept = -C / B;
 
-    cout << "y= " << slope << "x + " << (intercept) << endl;
-    ;
+    std::cout << "y=" << slope << "x + " << intercept << "\n";
 }
 
-void caseMedians(double x1, double y1, double x2, double y2, double x3, double y3)
+void caseMedians(Point p1, Point p2, Point p3)
 {
-    cout << "The equasions of the medians are: " << endl;
-    equasionOfALineByTwoPoints(x1, y1, middleX(x2, x3), middleY(y2, y3));
-    equasionOfALineByTwoPoints(x2, y2, middleX(x1, x3), middleY(y1, y3));
-    equasionOfALineByTwoPoints(x3, y3, middleX(x1, x2), middleY(y1, y2));
+    std::cout << "The equations of the medians are:\n";
+    equationOfALineByTwoPoints(p1, middlePoint(p2, p3));
+    equationOfALineByTwoPoints(p2, middlePoint(p1, p3));
+    equationOfALineByTwoPoints(p3, middlePoint(p1, p2));
 }
 
-void caseBisectors(double x1, double y1, double x2, double y2, double x3, double y3)
+void caseBisectors(Point p1, Point p2, Point p3)
 {
-    //The bisector is perpendicular and passes in the middle of the line 
-    //so we can use the function for the heights
-    //but with the middle point
-    double slopeOfA = slopeOflineByTwoPoints(x1, y1, x2, y2);
-    double slopeOfB = slopeOflineByTwoPoints(x2, y2, x3, y3);
-    double slopeOfC = slopeOflineByTwoPoints(x3, y3, x1, y1);
-    cout << "The eqasions of the bisectors are:" << endl;
-    constructHeightEqasion(slopeOfA, middleX(x1, x2), middleY(y1, y2));
-    constructHeightEqasion(slopeOfB, middleX(x2, x3), middleY(y2, y3));
-    constructHeightEqasion(slopeOfC, middleX(x3, x1), middleY(y3, y1));
+    double slopeOfA = slopeOfLineByTwoPoints(p1, p2);
+    double slopeOfB = slopeOfLineByTwoPoints(p2, p3);
+    double slopeOfC = slopeOfLineByTwoPoints(p3, p1);
+    std::cout << "The equations of the bisectors are:\n";
+    constructHeightEquation(slopeOfA, middlePoint(p1, p2));
+    constructHeightEquation(slopeOfB, middlePoint(p2, p3));
+    constructHeightEquation(slopeOfC, middlePoint(p3, p1));
 }
 
 int main()
 {
-
-    cout << "\n Choose a tool:\n"
-            "1. Check whether a point lies on a line\n"
-            "2. From a line g and a point p , derive an equation of a line that is parallel to g and passes through p\n"
-            "3. Given a line g and a point p lying on it, derive an equation of a line perpendicular to g with a fifth at p\n"
-            "4. Given two lines, find their intersection if it exists\n"
-            "5. By triangle (set by three points) constructs equations of the heights:\n"
-            "6. By triangle (set by three points) constructs equations of the medians:\n"
-            "7. By triangle (set by three points) constructs equations of the bisectors :\n"
-
-            "8.Exit \n";
+    std::cout << "\n Choose a tool:\n"
+                 "1. Check whether a point lies on a line\n"
+                 "2. From a line g and a point p, derive an equation of a line that is parallel to g and passes through p\n"
+                 "3. Given a line g and a point p lying on it, derive an equation of a line perpendicular to g with a fifth at p\n"
+                 "4. Given two lines, find their intersection if it exists\n"
+                 "5. By triangle (set by three points) constructs equations of the heights:\n"
+                 "6. By triangle (set by three points) constructs equations of the medians:\n"
+                 "7. By triangle (set by three points) constructs equations of the bisectors :\n"
+                 "8.Exit \n";
 
     while (true)
     {
         char choice;
-        cout << "Enter your choice: " << endl;
-        cin >> choice;
+        std::cout << "Enter your choice: ";
+        std::cin >> choice;
 
         switch (choice)
         {
         case '1':
-
-            if (isPointOnLine(inputPointX(), inputPointY(), inputLineSlope(), inputLineIntercept()) == true)
+        {
+            Point p = inputPoint();
+            Line l = inputLine();
+            if (isPointOnLine(p, l))
             {
-                cout << "The point lies on the line." << endl;
+                std::cout << "The point lies on the line.\n";
             }
             else
             {
-                cout << "The point does not lie on the line." << endl;
+                std::cout << "The point does not lie on the line.\n";
             }
-
             break;
-
+        }
         case '2':
-            parallelLine(inputPointX(), inputPointY(), inputLineSlope(), inputLineIntercept());
+        {
+            Point p = inputPoint();
+            Line l = inputLine();
+            parallelLine(p, l);
             break;
-
+        }
         case '3':
-
-            perpendicularLine(inputPointX(), inputPointY(), inputLineSlope(), inputLineIntercept());
+        {
+            Point p = inputPoint();
+            Line l = inputLine();
+            perpendicularLine(p, l);
             break;
-
+        }
         case '4':
-            intersectionOfTwoLines(inputLineSlope(), inputLineIntercept(), inputLineSlope(), inputLineIntercept());
+        {
+            Line l1 = inputLine();
+            Line l2 = inputLine();
+            intersectionOfTwoLines(l1, l2);
             break;
-
+        }
         case '5':
-            caseHeights(inputPointX(), inputPointY(), inputPointX(), inputPointY(), inputPointX(), inputPointY());
+        {
+            Point p1 = inputPoint();
+            Point p2 = inputPoint();
+            Point p3 = inputPoint();
+            caseHeights(p1, p2, p3);
             break;
-
+        }
         case '6':
-            caseMedians(inputPointX(), inputPointY(), inputPointX(), inputPointY(), inputPointX(), inputPointY());
+        {
+            Point p1 = inputPoint();
+            Point p2 = inputPoint();
+            Point p3 = inputPoint();
+            caseMedians(p1, p2, p3);
             break;
-
-        case '7':caseBisectors(inputPointX(), inputPointY(), inputPointX(), inputPointY(), inputPointX(), inputPointY());
+        }
+        case '7':
+        {
+            Point p1 = inputPoint();
+            Point p2 = inputPoint();
+            Point p3 = inputPoint();
+            caseBisectors(p1, p2, p3);
             break;
-
+        }
         case '8':
             return 0;
         }
     }
 }
+
