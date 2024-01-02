@@ -295,17 +295,114 @@ bool doTheLinesMakeAQuadrilateral(Line l1, Line l2, Line l3, Line l4)
     return true;
 }
 
+bool areLinesParallel(Line l1, Line l2)
+{
+    if (l1.slope == l2.slope)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+void typeOfQuadrilateral(double AB, double BC, double CD, double AD, Line l, Line m)
+{
+    if (compareTwoDoubleNums(AB, BC) && compareTwoDoubleNums(BC, CD) && compareTwoDoubleNums(CD, AD))
+    {
+        if (compareTwoDoubleNums(l.slope, -1 / m.slope))
+        {
+            std::cout << "It's a square.\n";
+        }
+        else
+        {
+            std::cout << "It's a rhombus.\n";
+        }
+    }
+    else if (compareTwoDoubleNums(AB, CD) && compareTwoDoubleNums(BC, AD))
+    {
+        if (compareTwoDoubleNums(l.slope, -1 / m.slope))
+        {
+            std::cout << "It's a rectangle.\n";
+        }
+        else
+        {
+            std::cout << "It's a parallelogram.\n";
+        }
+    }
+}
+
 void quadrilateralFormedByLines(Line l1, Line l2, Line l3, Line l4)
 {
-    Point A = intersectionOfTwoLines(l1, l2);
-    Point B = intersectionOfTwoLines(l2, l3);
-    Point C = intersectionOfTwoLines(l3, l4);
-    Point D = intersectionOfTwoLines(l1, l4);
+    if (areLinesParallel(l1, l2) || areLinesParallel(l3, l4))
+    {
+        Point A = intersectionOfTwoLines(l1, l3);
+        Point B = intersectionOfTwoLines(l1, l4);
+        Point C = intersectionOfTwoLines(l2, l4);
+        Point D = intersectionOfTwoLines(l2, l3);
 
-    double AB = distanceBetweenTwoPoints(A, B);
-    double BC = distanceBetweenTwoPoints(B, C);
-    double CD = distanceBetweenTwoPoints(C, D);
-    double AD = distanceBetweenTwoPoints(A, C);
+        double AB = distanceBetweenTwoPoints(A, B);
+        double BC = distanceBetweenTwoPoints(B, C);
+        double CD = distanceBetweenTwoPoints(C, D);
+        double AD = distanceBetweenTwoPoints(A, D);
+
+        if (areLinesParallel(l1, l2) && areLinesParallel(l3, l4))
+        {
+            typeOfQuadrilateral(AB, BC, CD, AD, l3, l1);
+        }
+        else
+        {
+            std::cout << "It's a trapezoid\n";
+        }
+    }
+
+    else if (areLinesParallel(l1, l3) || areLinesParallel(l2, l4))
+    {
+        Point A = intersectionOfTwoLines(l1, l2);
+        Point B = intersectionOfTwoLines(l1, l4);
+        Point C = intersectionOfTwoLines(l3, l4);
+        Point D = intersectionOfTwoLines(l2, l3);
+
+        double AB = distanceBetweenTwoPoints(A, B);
+        double BC = distanceBetweenTwoPoints(B, C);
+        double CD = distanceBetweenTwoPoints(C, D);
+        double AD = distanceBetweenTwoPoints(A, D);
+
+        if (areLinesParallel(l1, l3) && areLinesParallel(l2, l4))
+        {
+            typeOfQuadrilateral(AB, BC, CD, AD, l1, l2);
+        }
+        else
+        {
+            std::cout << "It's a trapezoid\n";
+        }
+    }
+    else if (areLinesParallel(l1, l4) || areLinesParallel(l2, l3))
+    {
+        Point A = intersectionOfTwoLines(l1, l2);
+        Point B = intersectionOfTwoLines(l1, l3);
+        Point C = intersectionOfTwoLines(l3, l4);
+        Point D = intersectionOfTwoLines(l2, l4);
+
+        double AB = distanceBetweenTwoPoints(A, B);
+        double BC = distanceBetweenTwoPoints(B, C);
+        double CD = distanceBetweenTwoPoints(C, D);
+        double AD = distanceBetweenTwoPoints(A, D);
+
+        if (areLinesParallel(l1, l4) && areLinesParallel(l2, l3))
+        {
+            typeOfQuadrilateral(AB, BC, CD, AD, l1, l2);
+        }
+        else
+        {
+            std::cout << "It's a trapezoid\n";
+        }
+    }
+    else
+    {
+        std::cout << "It's an arbitrary quadrilateral.\n";
+    }
 }
 
 int main()
@@ -427,7 +524,7 @@ int main()
             }
             else
             {
-                //quadrilateralFormedByLines(l1, l2, l3, l4);
+                quadrilateralFormedByLines(l1, l2, l3, l4);
             }
         }
 
