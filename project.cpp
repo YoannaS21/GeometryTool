@@ -196,11 +196,11 @@ void constructHeightEquation(double slope, Point p)
     }
     else if (compareTwoDoubleNums(slope, 0))
     {
-        cout << "x=" << p.x;
+        cout << "x=" << p.x << endl;
     }
     else if (slope == INFINITY)
     {
-        cout << "y=" << p.y;
+        cout << "y=" << p.y << endl;
     }
 }
 
@@ -249,7 +249,7 @@ void equationOfALineByTwoPoints(Point p1, Point p2)
 
     else
     {
-        cout << A << "x +" << B << "y+" << C << "= 0";
+        cout << A << "x +" << B << "y+" << C << "= 0\n";
     }
 }
 
@@ -310,7 +310,7 @@ void tangentOfParabolaEquasion(Parabola par, Point p)
 
     else
     {
-        cout << "The point is not on the parabola or the point is not on the real line";
+        cout << "The point is not on the parabola or the point is not on the real line\n";
     }
 }
 
