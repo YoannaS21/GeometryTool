@@ -1,3 +1,18 @@
+/**
+ *
+ * Solution to course project # <8>
+ * Introduction to programming course
+ * Faculty of Mathematics and Informatics of Sofia University
+ * Winter semester 2023/2024
+ *
+ * @author <Yoanna Stoeva>
+ * @idnumber <3MI0600342>
+ * @compiler <VC>
+ *
+ * <main file >
+ *
+ */
+
 #include <iostream>
 #include <cmath>
 #include <iomanip>
