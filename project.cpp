@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cmath>
+using namespace std;
 
 struct Point
 {
@@ -23,12 +24,12 @@ struct Parabola
 Parabola inputParabola()
 {
     Parabola par;
-    std::cout << "Enter a coordinate of the parabola: ";
-    std::cin >> par.a;
-    std::cout << "Enter b coordinate of the parabola: ";
-    std::cin >> par.b;
-    std::cout << "Enter c coordinate of the parabola: ";
-    std::cin >> par.c;
+    cout << "Enter a coordinate of the parabola: ";
+    cin >> par.a;
+    cout << "Enter b coordinate of the parabola: ";
+    cin >> par.b;
+    cout << "Enter c coordinate of the parabola: ";
+    cin >> par.c;
 
     return par;
 }
@@ -36,26 +37,26 @@ Parabola inputParabola()
 Point inputPoint()
 {
     Point p;
-    std::cout << "Enter x coordinate of the point: ";
-    std::cin >> p.x;
-    std::cout << "Enter y coordinate of the point: ";
-    std::cin >> p.y;
+    cout << "Enter x coordinate of the point: ";
+    cin >> p.x;
+    cout << "Enter y coordinate of the point: ";
+    cin >> p.y;
     return p;
 }
 
 Line inputLine()
 {
     Line l;
-    std::cout << "Enter slope of the line: ";
-    std::cin >> l.slope;
-    std::cout << "Enter intercept of the line: ";
-    std::cin >> l.intercept;
+    cout << "Enter slope of the line: ";
+    cin >> l.slope;
+    cout << "Enter intercept of the line: ";
+    cin >> l.intercept;
     return l;
 }
 
 bool isPointOnLine(Point p, Line l)
 {
-    double calculation = std::abs(p.y - (l.slope * p.x + l.intercept));
+    double calculation = abs(p.y - (l.slope * p.x + l.intercept));
     return calculation < __DBL_EPSILON__;
 }
 
@@ -85,13 +86,17 @@ void perpendicularLine(Point p, Line l)
             Line perpendicularLine;
             perpendicularLine.slope = -1 / l.slope;
             perpendicularLine.intercept = p.y - (perpendicularLine.slope * p.x);
-            std::cout << "Equation of the perpendicular line: y=" << perpendicularLine.slope
-                      << "x+(" << perpendicularLine.intercept << ")\n";
+            cout << "Equation of the perpendicular line: y=" << perpendicularLine.slope
+                 << "x+(" << perpendicularLine.intercept << ")\n";
+        }
+        else
+        {
+            cout << " The equasion of the perpendicular line is: x=" << p.y;
         }
     }
     else
     {
-        std::cout << "The point that you entered does not lie on the line.\n";
+        cout << "The point that you entered does not lie on the line.\n";
     }
 }
 
@@ -121,17 +126,36 @@ double slopeOfLineByTwoPoints(Point p1, Point p2)
 {
     double A = p2.y - p1.y;
     double B = -(p2.x - p1.x);
-    return -A / B;
+    if (A != 0 && B != 0)
+    {
+        return -A / B;
+    }
+    else if (A == 0 && B != 0)
+    {
+        return 0;
+    }
+    else
+    {
+        return INFINITY;
+    }
 }
 
 void constructHeightEquation(double slope, Point p)
 {
-    if (slope != 0)
+    if (slope != 0 && slope != INFINITY)
     {
         Line heightLine;
         heightLine.slope = -1 / slope;
         heightLine.intercept = p.y - (heightLine.slope * p.x);
-        std::cout << "y=" << heightLine.slope << "x+(" << heightLine.intercept << ")\n";
+        cout << "y=" << heightLine.slope << "x+(" << heightLine.intercept << ")\n";
+    }
+    else if (slope == 0)
+    {
+        cout << "x=" << p.y;
+    }
+    else if (slope == INFINITY)
+    {
+        cout << "y=" << p.x;
     }
 }
 
@@ -150,7 +174,7 @@ void caseHeights(Point p1, Point p2, Point p3)
     }
     else
     {
-        std::cout << "The points you entered don't make a triangle.\n";
+        cout << "The points you entered don't make a triangle.\n";
     }
 }
 
@@ -167,10 +191,19 @@ void equationOfALineByTwoPoints(Point p1, Point p2)
     double A = p2.y - p1.y;
     double B = -(p2.x - p1.x);
     double C = -p1.x * (p2.y - p1.y) - (p2.x - p1.x) * (-p1.y);
-    double slope = -A / B;
-    double intercept = -C / B;
 
-    std::cout << "y=" << slope << "x + " << intercept << "\n";
+    if (B != 0)
+    {
+
+        double slope = -A / B;
+        double intercept = -C / B;
+
+        cout << "y=" << slope << "x + " << intercept << "\n";
+    }
+    else
+    {
+        cout << A << "x +" << B << "y+" << C << "= 0";
+    }
 }
 
 void caseMedians(Point p1, Point p2, Point p3)
@@ -185,7 +218,7 @@ void caseMedians(Point p1, Point p2, Point p3)
     }
     else
     {
-        std::cout << "The points you entered don't make a triangle.\n";
+        cout << "The points you entered don't make a triangle.\n";
     }
 }
 
@@ -196,14 +229,15 @@ void caseBisectors(Point p1, Point p2, Point p3)
         double slopeOfA = slopeOfLineByTwoPoints(p1, p2);
         double slopeOfB = slopeOfLineByTwoPoints(p2, p3);
         double slopeOfC = slopeOfLineByTwoPoints(p3, p1);
-        std::cout << "The equations of the bisectors are:\n";
+
+        cout << "The equations of the bisectors are:\n";
         constructHeightEquation(slopeOfA, middlePoint(p1, p2));
         constructHeightEquation(slopeOfB, middlePoint(p2, p3));
         constructHeightEquation(slopeOfC, middlePoint(p3, p1));
     }
     else
     {
-        std::cout << "The points you entered don't make a triangle.\n";
+        cout << "The points you entered don't make a triangle.\n";
     }
 }
 
@@ -219,13 +253,13 @@ void tangentOfParabolaEquasion(Parabola par, Point p)
         // the eqasion is going to be in the form y=kx+m
         double k = slope;
         double m = p.y - k * p.x;
-        std::cout << "The eqasion of the tangent is: y = " << k << "x + "
-                  << "(" << m << ")"
-                  << "\n ";
+        cout << "The eqasion of the tangent is: y = " << k << "x + "
+             << "(" << m << ")"
+             << "\n ";
     }
     else
     {
-        std::cout << "The point is not on the parabola or the point is not on the real line";
+        cout << "The point is not on the parabola or the point is not on the real line";
     }
 }
 
@@ -242,7 +276,7 @@ void intersectonPointsParabolaAnbLine(Parabola par, Line l)
 
     if (discriminant < 0)
     {
-        std::cout << "No real roots.The parabola and the line don't intersect.\n";
+        cout << "No real roots.The parabola and the line don't intersect.\n";
     }
     else if (discriminant > 0)
     {
@@ -252,17 +286,17 @@ void intersectonPointsParabolaAnbLine(Parabola par, Line l)
         double y1 = l.slope * x1 + l.intercept;
         double y2 = l.slope * x2 + l.intercept;
 
-        std::cout << "The insertion points are: \n";
-        std::cout << "(" << x1 << ", " << y1 << ")\n";
-        std::cout << "(" << x2 << ", " << y2 << ")\n";
+        cout << "The insertion points are: \n";
+        cout << "(" << x1 << ", " << y1 << ")\n";
+        cout << "(" << x2 << ", " << y2 << ")\n";
     }
     else if (discriminant == 0)
     {
         double x = -B / 2 * A;
         double y = l.slope * x + l.intercept;
 
-        std::cout << "The insertion point is: ";
-        std::cout << "(" << x << ", " << y << ")\n";
+        cout << "The insertion point is: ";
+        cout << "(" << x << ", " << y << ")\n";
     }
 }
 
@@ -313,22 +347,22 @@ void typeOfQuadrilateral(double AB, double BC, double CD, double AD, Line l, Lin
     {
         if (compareTwoDoubleNums(l.slope, -1 / m.slope))
         {
-            std::cout << "It's a square.\n";
+            cout << "It's a square.\n";
         }
         else
         {
-            std::cout << "It's a rhombus.\n";
+            cout << "It's a rhombus.\n";
         }
     }
     else if (compareTwoDoubleNums(AB, CD) && compareTwoDoubleNums(BC, AD))
     {
         if (compareTwoDoubleNums(l.slope, -1 / m.slope))
         {
-            std::cout << "It's a rectangle.\n";
+            cout << "It's a rectangle.\n";
         }
         else
         {
-            std::cout << "It's a parallelogram.\n";
+            cout << "It's a parallelogram.\n";
         }
     }
 }
@@ -353,7 +387,7 @@ void quadrilateralFormedByLines(Line l1, Line l2, Line l3, Line l4)
         }
         else
         {
-            std::cout << "It's a trapezoid\n";
+            cout << "It's a trapezoid\n";
         }
     }
 
@@ -375,7 +409,7 @@ void quadrilateralFormedByLines(Line l1, Line l2, Line l3, Line l4)
         }
         else
         {
-            std::cout << "It's a trapezoid\n";
+            cout << "It's a trapezoid\n";
         }
     }
     else if (areLinesParallel(l1, l4) || areLinesParallel(l2, l3))
@@ -396,36 +430,36 @@ void quadrilateralFormedByLines(Line l1, Line l2, Line l3, Line l4)
         }
         else
         {
-            std::cout << "It's a trapezoid\n";
+            cout << "It's a trapezoid\n";
         }
     }
     else
     {
-        std::cout << "It's an arbitrary quadrilateral.\n";
+        cout << "It's an arbitrary quadrilateral.\n";
     }
 }
 
 int main()
 {
-    std::cout << "\n Choose a tool:\n"
-                 "0. Check whether a point lies on a line\n"
-                 "1. From a line g and a point p, derive an equation of a line that is parallel to g and passes through p\n"
-                 "2. Given a line g and a point p lying on it, derive an equation of a line perpendicular to g with a fifth at p\n"
-                 "3. Given two lines, find their intersection if it exists\n"
-                 "4. By triangle (set by three points) constructs equations of the heights:\n"
-                 "5. By triangle (set by three points) constructs equations of the medians:\n"
-                 "6. By triangle (set by three points) constructs equations of the bisectors :\n"
-                 "7. From a given equation of a parabola and a poit on the real line derive the equation of the tangent:\n"
-                 "8. From given equations of parabola and line to derive their insertion points:\n"
-                 "9. Given four equations of lines, determine the type of quadrilateral they form when they intersect:\n"
+    cout << "\n Choose a tool:\n"
+            "0. Check whether a point lies on a line\n"
+            "1. From a line g and a point p, derive an equation of a line that is parallel to g and passes through p\n"
+            "2. Given a line g and a point p lying on it, derive an equation of a line perpendicular to g with a fifth at p\n"
+            "3. Given two lines, find their intersection if it exists\n"
+            "4. By triangle (set by three points) constructs equations of the heights:\n"
+            "5. By triangle (set by three points) constructs equations of the medians:\n"
+            "6. By triangle (set by three points) constructs equations of the bisectors :\n"
+            "7. From a given equation of a parabola and a poit on the real line derive the equation of the tangent:\n"
+            "8. From given equations of parabola and line to derive their insertion points:\n"
+            "9. Given four equations of lines, determine the type of quadrilateral they form when they intersect:\n"
 
-                 "E.Exit \n";
+            "E.Exit \n";
 
     while (true)
     {
         char choice;
-        std::cout << "Enter your choice: ";
-        std::cin >> choice;
+        cout << "Enter your choice: ";
+        cin >> choice;
 
         switch (choice)
         {
@@ -435,11 +469,11 @@ int main()
             Line l = inputLine();
             if (isPointOnLine(p, l))
             {
-                std::cout << "The point lies on the line.\n";
+                cout << "The point lies on the line.\n";
             }
             else
             {
-                std::cout << "The point does not lie on the line.\n";
+                cout << "The point does not lie on the line.\n";
             }
             break;
         }
@@ -461,14 +495,14 @@ int main()
         {
             Line l1 = inputLine();
             Line l2 = inputLine();
-            if (std::abs(l1.slope - l2.slope) < std::numeric_limits<double>::epsilon())
+            if (abs(l1.slope - l2.slope) < std::numeric_limits<double>::epsilon())
             {
-                std::cout << "The two lines don't intersect.\n";
+                cout << "The two lines don't intersect.\n";
             }
             else
             {
                 Point intersection = intersectionOfTwoLines(l1, l2);
-                std::cout << "The intersection point of the two lines is: x=" << intersection.x << " y=" << intersection.y << "\n";
+                cout << "The intersection point of the two lines is: x=" << intersection.x << " y=" << intersection.y << "\n";
             }
             break;
         }
@@ -520,7 +554,7 @@ int main()
             Line l4 = inputLine();
             if (doTheLinesMakeAQuadrilateral(l1, l2, l3, l4) == false)
             {
-                std::cout << "The lines don't make a quadrilateral.";
+                cout << "The lines don't make a quadrilateral.";
             }
             else
             {
@@ -532,6 +566,13 @@ int main()
 
         case 'E':
             return 0;
+
+        default:
+        {
+
+            cout << "Invalid input. Enter new command from the above.";
+        }
+        break;
         }
     }
 }
