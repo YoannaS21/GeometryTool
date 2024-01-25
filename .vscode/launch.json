@@ -6,8 +6,8 @@
       "type": "lldb",
       "request": "launch",
       "args": [],
-      "cwd": "/Users/y.stoeva04/Desktop/GeometryTool",
-      "program": "/Users/y.stoeva04/Desktop/GeometryTool/build/Debug/outDebug"
+      "cwd": "/Users/y.stoeva04/Desktop/ФМИ🥲/GeometryTool",
+      "program": "/Users/y.stoeva04/Desktop/ФМИ🥲/GeometryTool/build/Debug/outDebug"
     }
   ]
 }

@@ -106,7 +106,7 @@ void parallelLine(Point p, Line l)
     parallelLine.slope = l.slope;
     parallelLine.intercept = p.y - parallelLine.slope * p.x;
 
-    if (compareTwoDoubleNums(parallelLine.intercept, l.intercept))
+    if (!compareTwoDoubleNums(parallelLine.intercept, l.intercept))
     {
         std::cout << "The equation of the parallel line is: y=" << setprecision(2) << parallelLine.slope
                   << "x+(" << parallelLine.intercept << ")\n";
@@ -506,7 +506,7 @@ void printText()
             "8. From given equations of parabola and line to derive their insertion points:\n"
             "9. Given four equations of lines, determine the type of quadrilateral they form when they intersect:\n"
 
-            "E.Exit \n";
+            "10.Exit \n";
 }
 
 int main()
@@ -516,13 +516,13 @@ int main()
 
     while (true)
     {
-        char choice;
+        int choice;
         cout << "Enter your choice: ";
         cin >> choice;
 
         switch (choice)
         {
-        case '0':
+        case 0:
         {
             Point p = inputPoint();
             Line l = inputLine();
@@ -536,21 +536,21 @@ int main()
             }
             break;
         }
-        case '1':
+        case 1:
         {
             Point p = inputPoint();
             Line l = inputLine();
             parallelLine(p, l);
             break;
         }
-        case '2':
+        case 2:
         {
             Point p = inputPoint();
             Line l = inputLine();
             perpendicularLine(p, l);
             break;
         }
-        case '3':
+        case 3:
         {
             Line l1 = inputLine();
             Line l2 = inputLine();
@@ -561,11 +561,12 @@ int main()
             else
             {
                 Point intersection = intersectionOfTwoLines(l1, l2);
-                cout << "The intersection point of the two lines is: x=" << intersection.x << " y=" << intersection.y << "\n";
+                cout << "The intersection point of the two lines is:( x=" << intersection.x << " y=" << intersection.y << ")"
+                     << "\n";
             }
             break;
         }
-        case '4':
+        case 4:
         {
             Point p1 = inputPoint();
             Point p2 = inputPoint();
@@ -573,7 +574,7 @@ int main()
             caseHeights(p1, p2, p3);
             break;
         }
-        case '5':
+        case 5:
         {
             Point p1 = inputPoint();
             Point p2 = inputPoint();
@@ -581,7 +582,7 @@ int main()
             caseMedians(p1, p2, p3);
             break;
         }
-        case '6':
+        case 6:
         {
             Point p1 = inputPoint();
             Point p2 = inputPoint();
@@ -589,7 +590,7 @@ int main()
             caseBisectors(p1, p2, p3);
             break;
         }
-        case '7':
+        case 7:
         {
             Parabola par = inputParabola();
             Point p = inputPoint();
@@ -597,7 +598,7 @@ int main()
         }
         break;
 
-        case '8':
+        case 8:
         {
             Parabola par = inputParabola();
             if (!compareTwoDoubleNums(par.a, 0))
@@ -612,7 +613,7 @@ int main()
         }
         break;
 
-        case '9':
+        case 9:
         {
             Line l1 = inputLine();
             Line l2 = inputLine();
@@ -640,7 +641,7 @@ int main()
 
             break;
         }
-        case 'E':
+        case 10:
             return 0;
 
         default:
